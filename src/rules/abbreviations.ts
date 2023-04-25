@@ -84,7 +84,7 @@ const rightLowercaseOrCaps = compose(anyPass([startsWithLower, isUpper]), fstWor
 const before = (s: string) => (t: string) => s.slice(0, Math.max(s.indexOf(t), 0));
 
 // does left contain pair abbreviation
-const isLeftPairsTail = (left) => {
+const isLeftPairsTail = (left: string) => {
     const rest = before(left);
 
     const head = compose(words, lstWord, rest, lstWord, lstToken);
