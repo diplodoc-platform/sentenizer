@@ -59,7 +59,7 @@ const lstWord = compose(lstToken, words);
 
 // extract first WINDOW_WIDTH characters
 const fstChars = (width = WINDOW_WIDTH) => {
-    const fstCharsPattern = `^.{0,${width}}`;
+    const fstCharsPattern = `^[\\s\\S]{0,${width}}`;
     const fstCharsFlags = 'gmu';
     const fstCharsRegExp = new RegExp(fstCharsPattern, fstCharsFlags);
 
