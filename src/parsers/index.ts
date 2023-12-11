@@ -9,7 +9,7 @@ import {
     WINDOW_WIDTH,
 } from '../constants';
 
-import {first, second} from '../lenses';
+import {first, second, last} from '../lenses';
 
 // unwrap first element of the string array
 const firstString = first<string>();
@@ -18,6 +18,9 @@ const fst = compose(defaultTo(''), view(firstString));
 // unwrap second element of the string array
 const secondString = second<string>();
 const snd = compose(defaultTo(''), view(secondString));
+
+const lastString = last<string>();
+const lst = compose(defaultTo(''), view(lastString));
 
 // extract sentences naively splitting by delimiters
 const sentencePattern = `([^${SENTENCE_END_MARKERS}]*?[${SENTENCE_END_MARKERS}]+)`;
@@ -54,8 +57,12 @@ const lstTokenRegExp = new RegExp(lstTokenPattern, lstTokenFlags);
 
 const lstToken = compose(defaultTo(''), snd, match(lstTokenRegExp));
 
+const wordPattern = /[\w\-а-яА-Я]+/;
+const wordFlags = 'gmu';
+const wordRegExp = new RegExp(wordPattern, wordFlags);
+
 // extract last word, excluding trailling delimiters
-const lstWord = compose(lstToken, words);
+const lstWord = compose(compose(lst, match(wordRegExp)), lstToken, words);
 
 // extract first WINDOW_WIDTH characters
 const fstChars = (width = WINDOW_WIDTH) => {
