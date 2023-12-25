@@ -24,7 +24,15 @@ import {
     OTHER_PAIR,
 } from '../constants/abbreviations';
 import {lengthNonZero, startsWithLower, isUpper} from '../utilities';
-import {dotSuffix, lstWord, fstWord, words, lstToken, fstToken} from '../parsers';
+import {
+    dotSuffix,
+    lstWord,
+    fstWord,
+    words,
+    lstToken,
+    fstToken,
+    omitNonAlphaStart,
+} from '../parsers';
 import {first, second} from '../lenses';
 
 const fst = compose(defaultTo(''), view(first<string>()));
@@ -67,7 +75,13 @@ const insideAbbreviationMap = anyPass([
 ]);
 
 // tail abbreviation test
-const isLeftAbbreviation = compose(insideAbbreviationMap, toLower, lstWord, lstToken);
+const isLeftAbbreviation = compose(
+    insideAbbreviationMap,
+    omitNonAlphaStart,
+    toLower,
+    lstWord,
+    lstToken,
+);
 
 // left abbreviation conditions:
 //     * delimiter is dot
