@@ -20,6 +20,7 @@ const secondString = second<string>();
 const snd = compose(defaultTo(''), view(secondString));
 
 const lastString = last<string>();
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const lst = compose(defaultTo(''), view(lastString));
 
 // extract sentences naively splitting by delimiters
@@ -57,12 +58,13 @@ const lstTokenRegExp = new RegExp(lstTokenPattern, lstTokenFlags);
 
 const lstToken = compose(defaultTo(''), snd, match(lstTokenRegExp));
 
-const wordPattern = /[\w\-а-яА-Я]+/;
-const wordFlags = 'gmu';
-const wordRegExp = new RegExp(wordPattern, wordFlags);
+const nonAlphaStartPattern = /^[^\wа-яА-Я]*/;
+const nonAlphaStartFlags = 'gmu';
+const nonAlphaStartRegExp = new RegExp(nonAlphaStartPattern, nonAlphaStartFlags);
 
-// extract last word, excluding trailling delimiters
-const lstWord = compose(compose(lst, match(wordRegExp)), lstToken, words);
+const omitNonAlphaStart = replace(nonAlphaStartRegExp, '');
+
+const lstWord = compose(lstToken, words);
 
 // extract first WINDOW_WIDTH characters
 const fstChars = (width = WINDOW_WIDTH) => {
@@ -154,6 +156,7 @@ export {
     fstWord,
     lstToken,
     lstWord,
+    omitNonAlphaStart,
     fstChars,
     lstChars,
     spacePrefix,
