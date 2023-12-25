@@ -60,6 +60,7 @@ describe('leftAbbreviation', () => {
         const actual = go(input);
         expect(actual).toBe(expected);
     });
+
     it('evaluates to false otherwise', () => {
         const go = compose(reduce(or, false), map(leftAbbreviation));
         const input = [
@@ -71,6 +72,18 @@ describe('leftAbbreviation', () => {
         const expected = false;
         const actual = go(input);
         expect(actual).toBe(expected);
+    });
+
+    it('ends with parens', () => {
+        const input = ['md).', ' Sentence'];
+        const actual = leftAbbreviation(input);
+        expect(actual).toStrictEqual(false);
+    });
+
+    it('starts with parens', () => {
+        const input = ['(см.', '[ссылка](file.md)'];
+        const actual = leftAbbreviation(input);
+        expect(actual).toStrictEqual(true);
     });
 });
 
