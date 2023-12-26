@@ -81,7 +81,7 @@ describe('leftAbbreviation', () => {
     });
 
     it('starts with parens', () => {
-        const input = ['(см.', '[ссылка](file.md)'];
+        const input = ['(см.', ' [ссылка](file.md)'];
         const actual = leftAbbreviation(input);
         expect(actual).toStrictEqual(true);
     });
