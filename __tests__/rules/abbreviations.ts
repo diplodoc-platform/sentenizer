@@ -114,6 +114,12 @@ describe('pairAbbreviation', () => {
         const actual = go(input);
         expect(actual).toBe(expected);
     });
+
+    it('handles sticking with parens', () => {
+        const input = ['(т.', 'е. кто-то другой)'];
+        const actual = pairAbbreviation(input);
+        expect(actual).toStrictEqual(true);
+    });
 });
 
 describe('leftPairsTailAbbreviation', () => {
@@ -133,6 +139,7 @@ describe('leftPairsTailAbbreviation', () => {
         const actual = go(input);
         expect(actual).toBe(expected);
     });
+
     it('evaluates to false otherwise', () => {
         const go = compose(reduce(or, false), map(leftPairsTailAbbreviation));
         const input = [
