@@ -55,7 +55,10 @@ const insidePairAbbreviationMap = anyPass([
 const isPairAbbreviation = compose(
     insidePairAbbreviationMap,
     hash,
-    zipWith<any, any, any>(call, [compose(lstWord, lstToken), compose(fstWord, fstToken)]),
+    zipWith<any, any, any>(call, [
+        compose(omitNonAlphaStart, lstWord, lstToken),
+        compose(fstWord, fstToken),
+    ]),
 );
 
 // pair abbreviation conditions:
