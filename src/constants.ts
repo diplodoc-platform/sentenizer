@@ -1,6 +1,6 @@
 const SENTENCE_END_MARKERS = '.?!…';
-const QUOTATION_GENERIC_MARKERS = `"„'`;
-const QUOTATION_CLOSE_MARKERS = '»”’';
+const QUOTATION_GENERIC_MARKERS = `«"„'`;
+const QUOTATION_CLOSE_MARKERS = '»"”’';
 const BRACKETS_CLOSE_MARKERS = '\\)\\]\\}>';
 
 const WINDOW_WIDTH = 10;

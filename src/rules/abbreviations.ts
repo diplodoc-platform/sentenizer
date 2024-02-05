@@ -71,9 +71,13 @@ const pairAbbreviation = allPass([
 
 // tail abbreviation join
 const insideAbbreviationMap = anyPass([
+    // @ts-ignore
     prop(__, INITIALS),
+    // @ts-ignore
     prop(__, HEAD),
+    // @ts-ignore
     prop(__, TAIL),
+    // @ts-ignore
     prop(__, OTHER),
 ]);
 

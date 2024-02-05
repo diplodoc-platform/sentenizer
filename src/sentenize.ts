@@ -1,5 +1,5 @@
 /* eslint-disable security/detect-non-literal-regexp, security/detect-unsafe-regex */
-import {compose, map, trim, anyPass, zipWith, call} from 'ramda';
+import {compose, anyPass, zipWith, call} from 'ramda';
 
 import {sentences, fstChars, lstChars} from './parsers';
 import {
@@ -69,9 +69,6 @@ function processor(text: string): string[] {
     return parsed;
 }
 
-// sentences postprocessing
-const postprocessor = map(trim);
-
-const sentenize = compose(postprocessor, processor);
+const sentenize = processor;
 
 export {sentenize};
