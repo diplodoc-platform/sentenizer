@@ -1,2 +1,2 @@
-export {lenLte, allEqual, lengthNonZero} from './list';
-export {charAt, notAlpha, hasAlpha, startsWithLower, isUpper} from './string';
+export * from './list';
+export * from './string';

@@ -84,19 +84,9 @@ const lstChars = (width = WINDOW_WIDTH) => {
     return compose(defaultTo(''), fst, match(lstCharsRegExp));
 };
 
-// extract space in the begining of the text
-const spacePrefixPattern = /^\s/;
-const spacePrefixFlags = 'gmu';
-const spacePrefixRegExp = new RegExp(spacePrefixPattern, spacePrefixFlags);
+const spacePrefix = compose(defaultTo(''), fst, match(/^\s/));
 
-const spacePrefix = compose(defaultTo(''), fst, match(spacePrefixRegExp));
-
-// extract space in the end of the text
-const spaceSuffixPattern = /\s$/;
-const spaceSuffixFlags = 'mu';
-const spaceSuffixRegExp = new RegExp(spaceSuffixPattern, spaceSuffixFlags);
-
-const spaceSuffix = compose(defaultTo(''), fst, match(spaceSuffixRegExp));
+const spaceSuffix = compose(defaultTo(''), fst, match(/\s$/));
 
 // extract generic quote in the begining of the text
 const quotationGenericPrefixPattern = `^([${QUOTATION_GENERIC_MARKERS}]+)`;

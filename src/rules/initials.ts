@@ -28,6 +28,4 @@ const leftHasAlpha = compose(hasAlpha, lstWord);
 
 const isLeftInitials = allPass([isLeftDotDelimiter, isLeftSingleLetter, isLeftUpper, leftHasAlpha]);
 
-const leftInitials = compose(all(Boolean), zipWith(call, [isLeftInitials, always(true)]));
-
-export {leftInitials};
+export const leftInitials = compose(all(Boolean), zipWith(call, [isLeftInitials, always(true)]));

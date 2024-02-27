@@ -64,7 +64,7 @@ const isPairAbbreviation = compose(
 // pair abbreviation conditions:
 //     * separated by dot
 //     * hashed words from adjacent sides are known abbreviation pairs
-const pairAbbreviation = allPass([
+export const pairAbbreviation = allPass([
     compose(isDotDelimiter, lstToken, fst),
     isPairAbbreviation as Pred<any[]>,
 ]);
@@ -93,7 +93,7 @@ const isLeftAbbreviation = compose(
 // left abbreviation conditions:
 //     * delimiter is dot
 //     * lefts side right most word is known abbreviation
-const leftAbbreviation = compose(
+export const leftAbbreviation = compose(
     allPass([compose(isDotDelimiter, lstToken), isLeftAbbreviation]),
     fst,
 );
@@ -120,10 +120,8 @@ const isLeftPairsTail = (left: string) => {
 //     * delimiter is dot
 //     * we split at the tail of the pair abbreviation
 //     * right word starts with lowercase or entirely in uppercase
-const leftPairsTailAbbreviation = allPass([
+export const leftPairsTailAbbreviation = allPass([
     compose(isDotDelimiter, lstToken, fst),
     compose(isLeftPairsTail, fst) as Pred<any[]>,
     rightLowercaseOrCaps,
 ]);
-
-export {pairAbbreviation, leftAbbreviation, leftPairsTailAbbreviation};

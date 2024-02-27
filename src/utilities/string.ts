@@ -1,19 +1,20 @@
-import { compose, invoker, juxt, allPass, identity, not, toLower, toUpper, Pred, match } from 'ramda';
+import {compose, invoker, juxt, allPass, identity, not, toLower, toUpper, Pred, match} from 'ramda';
+import {allEqual, lengthNonZero} from './list';
 
-import {allEqual} from './list';
+export const charAt = invoker(1, 'charAt');
 
-const charAt = invoker(1, 'charAt');
+export const notAlpha = compose(allEqual, juxt([toLower, toUpper]));
 
-const notAlpha = compose(allEqual, juxt([toLower, toUpper]));
+export const hasAlpha = compose(not, notAlpha);
 
-const hasAlpha = compose(not, notAlpha);
-
-const startsWithLower = allPass([
-    compose(compose(not, match(/\n/)), charAt(0)) as Pred<any[]>,
-    compose(compose(not, notAlpha), charAt(0)) as Pred<any[]>,
+export const startsWithLower = allPass([
+    compose(not, lengthNonZero, match(/\n/), charAt(0)) as Pred<any[]>,
+    compose(not, notAlpha, charAt(0)) as Pred<any[]>,
     compose(allEqual, juxt([identity, toLower]), charAt(0)) as Pred<any[]>,
 ]);
 
-const isUpper = compose(allEqual, juxt([toUpper, identity]));
+export const startsWithNonAlpha = compose(notAlpha, charAt(0)) as Pred<any[]>;
 
-export {charAt, notAlpha, hasAlpha, startsWithLower, isUpper};
+export const startsWithNewLine = compose(lengthNonZero, match(/\n/), charAt(0)) as Pred<any[]>;
+
+export const isUpper = compose(allEqual, juxt([toUpper, identity]));
