@@ -8,13 +8,19 @@ export const notAlpha = compose(allEqual, juxt([toLower, toUpper]));
 export const hasAlpha = compose(not, notAlpha);
 
 export const startsWithLower = allPass([
-    compose(not, lengthNonZero, match(/\n/), charAt(0)) as Pred<any[]>,
-    compose(not, notAlpha, charAt(0)) as Pred<any[]>,
+    compose(hasAlpha, charAt(0)) as Pred<any[]>,
     compose(allEqual, juxt([identity, toLower]), charAt(0)) as Pred<any[]>,
 ]);
 
-export const startsWithNonAlpha = compose(notAlpha, charAt(0)) as Pred<any[]>;
+export const startsWithUpper = allPass([
+    compose(hasAlpha, charAt(0)) as Pred<any[]>,
+    compose(allEqual, juxt([identity, toUpper]), charAt(0)) as Pred<any[]>,
+]);
 
-export const startsWithNewLine = compose(lengthNonZero, match(/\n/), charAt(0)) as Pred<any[]>;
+export const startsWithNewline = compose(lengthNonZero, match(/^\n/)) as Pred<any[]>;
+
+export const startsWithHardbreak = compose(lengthNonZero, match(/^\n\n/)) as Pred<any[]>;
+
+export const endsWithHardbreak = compose(lengthNonZero, match(/\n\n$/)) as Pred<any[]>;
 
 export const isUpper = compose(allEqual, juxt([toUpper, identity]));
