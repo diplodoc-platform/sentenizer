@@ -1,6 +1,6 @@
 {
   "name": "@diplodoc/sentenizer",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "text segmentation into sentences",
   "homepage": "https://github.com/diplodoc-platform/sentenizer",
   "bugs": {
