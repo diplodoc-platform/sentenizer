@@ -13,7 +13,7 @@ sentenize :: string -> string[]
 
 ## usage
 ```
-const {sentenize} = require('sentenizer');
+const {sentenize} = require('@diplodoc/sentenizer');
 
 const text = 'Он купил фрукты - яблоки, бананы, и т. д. все были очень рады угощению. Вот такой он добродушный наш родственник И. В. Иванов.';
 
