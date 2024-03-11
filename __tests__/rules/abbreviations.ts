@@ -123,32 +123,28 @@ describe('pairAbbreviation', () => {
 });
 
 describe('leftPairsTailAbbreviation', () => {
-    it('evaluates to true if left is tail of the pair abbreviation', () => {
-        const go = compose(reduce(and, true), map(leftPairsTailAbbreviation));
-        const generateInput = compose(
-            unnest,
-            juxt([keysUpperWithRightUpper, keysSpacesWithRightLower]),
-            keys,
-        );
-        const input = [
-            ...generateInput(HEAD_PAIR),
-            ...generateInput(TAIL_PAIR),
-            ...generateInput(OTHER_PAIR),
-        ];
-        const expected = true;
-        const actual = go(input);
-        expect(actual).toBe(expected);
-    });
+    const test = (expected: boolean) =>  (pair: string[]) => {
+        it('handles "' + pair.join('') + '"', () => {
+            expect(leftPairsTailAbbreviation(pair)).toBe(expected);
+        });
+    }
 
-    it('evaluates to false otherwise', () => {
-        const go = compose(reduce(or, false), map(leftPairsTailAbbreviation));
-        const input = [
-            ['фоо.бар. ', 'амбар'],
-            ['not.an.abbr.', ' not happening'],
-            ['not. an. abbr.', ' not happening'],
-        ];
-        const expected = false;
-        const actual = go(input);
-        expect(actual).toBe(expected);
-    });
+    const generateInput = compose(
+        unnest,
+        juxt([keysUpperWithRightUpper, keysSpacesWithRightLower]),
+        keys,
+    );
+
+    [
+        ...generateInput(HEAD_PAIR),
+        ...generateInput(TAIL_PAIR),
+        ...generateInput(OTHER_PAIR),
+    ].forEach(test(true));
+
+    [
+        ['фоо.бар. ', 'амбар'],
+        ['not.an.abbr.', ' not happening'],
+        ['not. an. abbr.', ' not happening'],
+        ['и т.п.', ' В очереди'],
+    ].forEach(test(false));
 });

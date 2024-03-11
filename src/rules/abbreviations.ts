@@ -12,6 +12,8 @@ import {
     anyPass,
     toLower,
     Pred,
+    length,
+    lt,
 } from 'ramda';
 
 import {
@@ -98,8 +100,10 @@ export const leftAbbreviation = compose(
     fst,
 );
 
+const isCaps = allPass([isUpper, compose(lt(1), length)]);
+
 // right join condition is to be uppercase or lowercase word
-const rightLowercaseOrCaps = compose(anyPass([startsWithLower, isUpper]), fstWord, snd);
+const rightLowercaseOrCaps = compose(anyPass([startsWithLower, isCaps]), fstWord, snd);
 
 // portion of the source <s> before target <t>
 const before = (s: string) => (t: string) => s.slice(0, Math.max(s.indexOf(t), 0));

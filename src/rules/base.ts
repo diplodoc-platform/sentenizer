@@ -1,4 +1,19 @@
-import { call, zipWith, compose, map, all, not, always, Pred, identity, allPass } from 'ramda';
+import {
+    call,
+    zipWith,
+    compose,
+    map,
+    all,
+    not,
+    always,
+    Pred,
+    identity,
+    allPass,
+    equals,
+    length,
+    juxt,
+    toUpper
+} from 'ramda';
 
 import {
     startsWithLower,
@@ -6,7 +21,7 @@ import {
     startsWithNewline,
     startsWithHardbreak,
     endsWithHardbreak,
-    lengthNonZero,
+    lengthNonZero, allEqual, hasAlpha,
 } from '../utilities';
 import {
     fstToken,
@@ -17,9 +32,19 @@ import {
     quotationClosePrefix,
     bracketsClosePrefix,
     delimiterPrefix,
-    spaces,
+    spaces, dotSuffix, lstWord,
 } from '../parsers';
 
+// determine if left is part of the initials
+// conditions:
+//     * left delimiter is dot
+//     * left last word is single letter
+//     * left last word is in upper case
+//     * left has alpha characters
+const isLeftDotDelimiter = compose(lengthNonZero, dotSuffix);
+const isLeftSingleLetter = compose(equals(1), length, lstWord);
+const isLeftUpper = compose(allEqual, juxt([toUpper, identity]), lstWord);
+const leftHasAlpha = compose(hasAlpha, lstWord);
 const isSpaceSuffix = compose(lengthNonZero, spaceSuffix);
 const isSpacePrefix = compose(lengthNonZero, spacePrefix);
 
@@ -73,3 +98,5 @@ export const leftEndsWithHardbreak = rule('leftEndsWithHardbreak', [endsWithHard
 export const rightStartsWithHardbreak = rule('rightStartsWithHardbreak', [_, startsWithHardbreak]);
 
 export const rightStartsNewlineUppercased = rule('rightStartsNewlineUppercased', [_, allPass([startsWithNewline, startsWithUpper])]);
+
+export const leftInitials = rule('leftInitials', [allPass([isLeftDotDelimiter, isLeftSingleLetter, isLeftUpper, leftHasAlpha]), _]);
