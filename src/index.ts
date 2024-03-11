@@ -52,7 +52,7 @@ const breaks = compose(breakCondition, zipWith<any, any, any>(call, sidesPreproc
 
 // sentences processing
 export function sentenize(text: string): string[] {
-    const parts = text.split(/(\n{2,})/);
+    const parts = text.split(/((?:\n\s*){2,})/);
     const parsed: string[] = [];
 
     for (const part of parts) {
