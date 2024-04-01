@@ -1,15 +1,14 @@
-/* eslint-disable security/detect-non-literal-regexp, security/detect-unsafe-regex */
-import {replace, compose, filter, split, match, view, defaultTo} from 'ramda';
+import {compose, defaultTo, filter, match, replace, split, view} from 'ramda';
 
 import {
-    SENTENCE_END_MARKERS,
-    QUOTATION_GENERIC_MARKERS,
-    QUOTATION_CLOSE_MARKERS,
-    BRACKETS_CLOSE_MARKERS,
-    WINDOW_WIDTH,
+  BRACKETS_CLOSE_MARKERS,
+  QUOTATION_CLOSE_MARKERS,
+  QUOTATION_GENERIC_MARKERS,
+  SENTENCE_END_MARKERS,
+  WINDOW_WIDTH,
 } from '../constants';
 
-import {first, second, last} from '../lenses';
+import {first, last, second} from '../lenses';
 
 // unwrap first element of the string array
 const firstString = first<string>();
@@ -68,20 +67,20 @@ const lstWord = compose(lstToken, words);
 
 // extract first WINDOW_WIDTH characters
 const fstChars = (width = WINDOW_WIDTH) => {
-    const fstCharsPattern = `^[\\s\\S]{0,${width}}`;
-    const fstCharsFlags = 'gmu';
-    const fstCharsRegExp = new RegExp(fstCharsPattern, fstCharsFlags);
+  const fstCharsPattern = `^[\\s\\S]{0,${width}}`;
+  const fstCharsFlags = 'gmu';
+  const fstCharsRegExp = new RegExp(fstCharsPattern, fstCharsFlags);
 
-    return compose(defaultTo(''), fst, match(fstCharsRegExp));
+  return compose(defaultTo(''), fst, match(fstCharsRegExp));
 };
 
 // extract last width (default WINDOW_WIDTH) characters
 const lstChars = (width = WINDOW_WIDTH) => {
-    const lstCharsPattern = `.{0,${width}}$`;
-    const lstCharsFlags = 'gmu';
-    const lstCharsRegExp = new RegExp(lstCharsPattern, lstCharsFlags);
+  const lstCharsPattern = `.{0,${width}}$`;
+  const lstCharsFlags = 'gmu';
+  const lstCharsRegExp = new RegExp(lstCharsPattern, lstCharsFlags);
 
-    return compose(defaultTo(''), fst, match(lstCharsRegExp));
+  return compose(defaultTo(''), fst, match(lstCharsRegExp));
 };
 
 const spacePrefix = compose(defaultTo(''), fst, match(/^\s/));
@@ -92,8 +91,8 @@ const spaceSuffix = compose(defaultTo(''), fst, match(/\s$/));
 const quotationGenericPrefixPattern = `^([${QUOTATION_GENERIC_MARKERS}]+)`;
 const quotationGenericPrefixFlags = 'mu';
 const quotationGenericPrefixRegExp = new RegExp(
-    quotationGenericPrefixPattern,
-    quotationGenericPrefixFlags,
+  quotationGenericPrefixPattern,
+  quotationGenericPrefixFlags,
 );
 
 const quotationGenericPrefix = compose(defaultTo(''), snd, match(quotationGenericPrefixRegExp));
@@ -102,8 +101,8 @@ const quotationGenericPrefix = compose(defaultTo(''), snd, match(quotationGeneri
 const quotationClosePrefixPattern = `^([${QUOTATION_CLOSE_MARKERS}]+)`;
 const quotationClosePrefixFlags = 'mu';
 const quotationClosePrefixRegExp = new RegExp(
-    quotationClosePrefixPattern,
-    quotationClosePrefixFlags,
+  quotationClosePrefixPattern,
+  quotationClosePrefixFlags,
 );
 
 const quotationClosePrefix = compose(defaultTo(''), snd, match(quotationClosePrefixRegExp));
@@ -137,24 +136,24 @@ const dotSuffixRegExp = new RegExp(dotSuffixPattern, dotSuffixFlags);
 const dotSuffix = compose(defaultTo(''), snd, match(dotSuffixRegExp));
 
 export {
-    sentences,
-    words,
-    delimiters,
-    fst,
-    snd,
-    fstToken,
-    fstWord,
-    lstToken,
-    lstWord,
-    omitNonAlphaStart,
-    fstChars,
-    lstChars,
-    spacePrefix,
-    spaceSuffix,
-    quotationGenericPrefix,
-    quotationClosePrefix,
-    bracketsClosePrefix,
-    delimiterPrefix,
-    spaces,
-    dotSuffix,
+  sentences,
+  words,
+  delimiters,
+  fst,
+  snd,
+  fstToken,
+  fstWord,
+  lstToken,
+  lstWord,
+  omitNonAlphaStart,
+  fstChars,
+  lstChars,
+  spacePrefix,
+  spaceSuffix,
+  quotationGenericPrefix,
+  quotationClosePrefix,
+  bracketsClosePrefix,
+  delimiterPrefix,
+  spaces,
+  dotSuffix,
 };
