@@ -8,7 +8,7 @@ import {
   WINDOW_WIDTH,
 } from '../constants';
 
-import {first, last, second} from '../lenses';
+import {first, second} from '../lenses';
 
 // unwrap first element of the string array
 const firstString = first<string>();
@@ -17,10 +17,6 @@ const fst = compose(defaultTo(''), view(firstString));
 // unwrap second element of the string array
 const secondString = second<string>();
 const snd = compose(defaultTo(''), view(secondString));
-
-const lastString = last<string>();
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const lst = compose(defaultTo(''), view(lastString));
 
 // extract sentences naively splitting by delimiters
 const sentencePattern = `([^${SENTENCE_END_MARKERS}]*?[${SENTENCE_END_MARKERS}]+)`;
