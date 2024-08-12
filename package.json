@@ -28,7 +28,11 @@
     "build:dev": "npm run build:dev:clean && npm run build:dev:code",
     "build:dev:code": "node scripts/development.js",
     "build:dev:clean": "rm -rf dist",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "lint": "lint update && lint",
+    "lint:fix": "lint update && lint fix",
+    "pre-commit": "lint update && lint-staged",
+    "prepare": "husky"
   },
   "author": {
     "name": "moki-codes",
@@ -52,6 +56,7 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
+    "@diplodoc/lint": "^1.1.1",
     "ramda": "^0.28.0"
   }
 }

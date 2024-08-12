@@ -1,12 +1,10 @@
-node_modules
-/lib
-/src/playground.ts
-
 .idea
 .vscode
 .history
 .env
 .DS_Store
+node_modules
+/lib
 /dist
 /build
 /cache
