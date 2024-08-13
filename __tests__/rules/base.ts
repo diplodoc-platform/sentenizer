@@ -1,36 +1,35 @@
 import {
-    compose,
-    map,
-    reduce,
-    zip,
-    juxt,
-    or,
-    and,
-    split,
-    join,
-    concat,
     always,
-    filter,
-    not,
+    and,
+    compose,
+    concat,
     equals,
+    filter,
+    join,
+    juxt,
+    map,
+    not,
+    or,
+    reduce,
+    split,
+    zip,
 } from 'ramda';
 
 import {
-    SENTENCE_END_MARKERS,
-    QUOTATION_GENERIC_MARKERS,
-    QUOTATION_CLOSE_MARKERS,
     BRACKETS_CLOSE_MARKERS,
+    QUOTATION_CLOSE_MARKERS,
+    QUOTATION_GENERIC_MARKERS,
+    SENTENCE_END_MARKERS,
 } from '../../src/constants';
-
 import {
-    spaceBothSides,
-    rightLacksSpacePrefix,
-    rightStartsWithLowercase,
-    rightDelimiterPrefix,
-    rightQuotationGenericPrefix,
-    rightQuotationClosePrefix,
     rightBracketsClosePrefix,
+    rightDelimiterPrefix,
+    rightLacksSpacePrefix,
     rightOnlySpaces,
+    rightQuotationClosePrefix,
+    rightQuotationGenericPrefix,
+    rightStartsWithLowercase,
+    spaceBothSides,
 } from '../../src/rules';
 
 describe('spaceBothSides', () => {

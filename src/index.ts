@@ -2,21 +2,21 @@ import {anyPass, call, compose, zipWith} from 'ramda';
 
 import {fstChars, lstChars, sentences} from './parsers';
 import {
-  leftAbbreviation,
-  leftEndsWithHardbreak,
-  leftInitials,
-  leftPairsTailAbbreviation,
-  pairAbbreviation,
-  rightBracketsClosePrefix,
-  rightDelimiterPrefix,
-  rightLacksSpacePrefix,
-  rightOnlySpaces,
-  rightQuotationClosePrefix,
-  rightQuotationGenericPrefix,
-  rightStartsNewlineUppercased,
-  rightStartsWithHardbreak,
-  rightStartsWithLowercase,
-  spaceBothSides,
+    leftAbbreviation,
+    leftEndsWithHardbreak,
+    leftInitials,
+    leftPairsTailAbbreviation,
+    pairAbbreviation,
+    rightBracketsClosePrefix,
+    rightDelimiterPrefix,
+    rightLacksSpacePrefix,
+    rightOnlySpaces,
+    rightQuotationClosePrefix,
+    rightQuotationGenericPrefix,
+    rightStartsNewlineUppercased,
+    rightStartsWithHardbreak,
+    rightStartsWithLowercase,
+    spaceBothSides,
 } from './rules';
 
 // sides preprocessing before evaluation
@@ -26,55 +26,59 @@ const sidesPreprocessors = [leftPreprocessor, rightPreprocessor];
 
 // conditions to join upon
 const joinCondition = anyPass([
-  spaceBothSides,
-  rightLacksSpacePrefix,
-  rightStartsWithLowercase,
-  rightDelimiterPrefix,
-  rightQuotationGenericPrefix,
-  rightQuotationClosePrefix,
-  rightBracketsClosePrefix,
-  rightOnlySpaces,
-  leftInitials,
-  leftAbbreviation,
-  pairAbbreviation,
-  leftPairsTailAbbreviation,
+    spaceBothSides,
+    rightLacksSpacePrefix,
+    rightStartsWithLowercase,
+    rightDelimiterPrefix,
+    rightQuotationGenericPrefix,
+    rightQuotationClosePrefix,
+    rightBracketsClosePrefix,
+    rightOnlySpaces,
+    leftInitials,
+    leftAbbreviation,
+    pairAbbreviation,
+    leftPairsTailAbbreviation,
 ]);
 
 const breakCondition = anyPass([
-  leftEndsWithHardbreak,
-  rightStartsWithHardbreak,
-  rightStartsNewlineUppercased,
+    leftEndsWithHardbreak,
+    rightStartsWithHardbreak,
+    rightStartsNewlineUppercased,
 ]);
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const join = compose(joinCondition, zipWith<any, any, any>(call, sidesPreprocessors));
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const breaks = compose(breakCondition, zipWith<any, any, any>(call, sidesPreprocessors));
 
 // sentences processing
 export function sentenize(text: string): string[] {
-  const parts = text.split(/((?:\n\s*){2,})/);
-  const parsed: string[] = [];
+    const parts = text.split(/((?:\n\s*){2,})/);
+    const parsed: string[] = [];
 
-  for (const part of parts) {
-    const chunks = sentences(part);
+    for (const part of parts) {
+        const chunks = sentences(part);
 
-    let left: string | null = null;
-    for (const right of chunks) {
-      if (!left) {
-        left = right;
-        continue;
-      }
+        let left: string | null = null;
+        for (const right of chunks) {
+            if (!left) {
+                left = right;
+                continue;
+            }
 
-      if (!breaks([left, right]) && join([left, right])) {
-        left += right;
-      } else {
-        parsed.push(left);
+            if (!breaks([left, right]) && join([left, right])) {
+                left += right;
+            } else {
+                parsed.push(left);
 
-        left = right;
-      }
+                left = right;
+            }
+        }
+
+        if (left) {
+            parsed.push(left);
+        }
     }
 
-    if (left) parsed.push(left);
-  }
-
-  return parsed;
+    return parsed;
 }

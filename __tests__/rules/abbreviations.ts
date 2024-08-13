@@ -1,34 +1,33 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import {
+    and,
     compose,
-    map,
-    reduce,
-    keys,
-    toUpper,
-    split,
     concat,
     flip,
-    unnest,
     juxt,
-    and,
+    keys,
+    map,
     or,
+    reduce,
+    split,
+    toUpper,
+    unnest,
 } from 'ramda';
 
-import {leftAbbreviation, pairAbbreviation, leftPairsTailAbbreviation} from '../../src/rules';
+import {leftAbbreviation, leftPairsTailAbbreviation, pairAbbreviation} from '../../src/rules';
 import {
-    INITIALS,
     HEAD,
-    TAIL,
-    OTHER,
     HEAD_PAIR,
-    TAIL_PAIR,
+    INITIALS,
+    OTHER,
     OTHER_PAIR,
+    TAIL,
+    TAIL_PAIR,
 } from '../../src/constants/abbreviations';
 
 const pairWith =
     (a: string) =>
-    (b: string): [string, string] =>
-        [b, a];
+    (b: string): [string, string] => [b, a];
 
 const keysWithRightFirstUpper = map(compose(pairWith(' С заглавной'), flip(concat)('.')));
 const keysSpacesWithRightFirstUpper = map(compose(pairWith(' С заглавной'), flip(concat)('. ')));
@@ -123,11 +122,11 @@ describe('pairAbbreviation', () => {
 });
 
 describe('leftPairsTailAbbreviation', () => {
-    const test = (expected: boolean) =>  (pair: string[]) => {
+    const test = (expected: boolean) => (pair: string[]) => {
         it('handles "' + pair.join('') + '"', () => {
             expect(leftPairsTailAbbreviation(pair)).toBe(expected);
         });
-    }
+    };
 
     const generateInput = compose(
         unnest,

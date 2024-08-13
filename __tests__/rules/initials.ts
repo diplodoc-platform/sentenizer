@@ -1,4 +1,5 @@
-import {compose, map, reduce, and, or} from 'ramda';
+import {and, compose, map, or, reduce} from 'ramda';
+
 import {leftInitials} from '../../src/rules';
 
 describe('leftInitials', () => {

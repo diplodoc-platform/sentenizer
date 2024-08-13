@@ -23,10 +23,10 @@
     "test": "jest --coverage --verbose --silent=false",
     "test:watch": "jest --watch --verbose --silent=false",
     "build": "npm run build:clean && npm run build:code",
-    "build:code": "tsc -p tsconfig.types.json && node scripts/bundle.js",
+    "build:code": "tsc -p tsconfig.types.json && node esbuild/build.js",
     "build:clean": "rm -rf lib",
     "build:dev": "npm run build:dev:clean && npm run build:dev:code",
-    "build:dev:code": "node scripts/development.js",
+    "build:dev:code": "node esbuild/development.js",
     "build:dev:clean": "rm -rf dist",
     "prepublishOnly": "npm run build",
     "lint": "lint update && lint",
@@ -42,6 +42,7 @@
   "license": "MIT",
   "devDependencies": {
     "@diplodoc/eslint-config": "^2.0.0",
+    "@diplodoc/lint": "^1.1.2",
     "@diplodoc/prettier-config": "^2.0.0",
     "@diplodoc/tsconfig": "^1.0.2",
     "@es-exec/api": "0.0.5",
@@ -56,7 +57,6 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "@diplodoc/lint": "^1.1.1",
     "ramda": "^0.28.0"
   }
 }

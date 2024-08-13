@@ -1,4 +1,5 @@
 import {lensIndex, view} from 'ramda';
+
 import {first, second} from '../src/lenses';
 
 describe('first', () => {

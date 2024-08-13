@@ -1,33 +1,32 @@
 /* eslint-disable @typescript-eslint/no-shadow */
-import {compose, map, reduce, split, filter, not, equals, and, or} from 'ramda';
+import {and, compose, equals, filter, map, not, or, reduce, split} from 'ramda';
 
 import {
-    SENTENCE_END_MARKERS,
     BRACKETS_CLOSE_MARKERS,
-    QUOTATION_GENERIC_MARKERS,
     QUOTATION_CLOSE_MARKERS,
+    QUOTATION_GENERIC_MARKERS,
+    SENTENCE_END_MARKERS,
 } from '../src/constants';
-
 import {
-    fst,
-    snd,
-    sentences,
-    words,
+    bracketsClosePrefix,
+    delimiterPrefix,
     delimiters,
+    dotSuffix,
+    fst,
+    fstChars,
     fstToken,
     fstWord,
+    lstChars,
     lstToken,
     lstWord,
-    fstChars,
-    lstChars,
+    quotationClosePrefix,
+    quotationGenericPrefix,
+    sentences,
+    snd,
     spacePrefix,
     spaceSuffix,
-    quotationGenericPrefix,
-    quotationClosePrefix,
-    delimiterPrefix,
-    bracketsClosePrefix,
     spaces,
-    dotSuffix,
+    words,
 } from '../src/parsers';
 
 describe('fst', () => {

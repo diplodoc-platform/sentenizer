@@ -1,14 +1,14 @@
-import {compose, map, reduce, split, and, or} from 'ramda';
+import {and, compose, map, or, reduce, split} from 'ramda';
 
 import {
-    lenLte,
     allEqual,
-    lengthNonZero,
     charAt,
-    notAlpha,
-    startsWithLower,
     hasAlpha,
     isUpper,
+    lenLte,
+    lengthNonZero,
+    notAlpha,
+    startsWithLower,
 } from '../src/utilities';
 
 describe('lenLte', () => {
