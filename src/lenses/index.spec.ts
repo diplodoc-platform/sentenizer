@@ -1,6 +1,6 @@
 import {lensIndex, view} from 'ramda';
 
-import {first, second} from '../src/lenses';
+import {first, second} from './';
 
 describe('first', () => {
     it('creates first element in a array lens', () => {

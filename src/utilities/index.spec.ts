@@ -9,7 +9,7 @@ import {
     lengthNonZero,
     notAlpha,
     startsWithLower,
-} from '../src/utilities';
+} from './';
 
 describe('lenLte', () => {
     it('should evaluate to true if array is less than or equal to provided value', () => {

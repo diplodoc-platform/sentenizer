@@ -1,4 +1,4 @@
-import {sentenize} from '../src';
+import {sentenize} from './';
 
 describe('sentenize naive', function () {
     it('should handle one basic sentence', () => {

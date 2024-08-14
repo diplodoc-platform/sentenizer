@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-shadow */
 import {and, compose, equals, filter, map, not, or, reduce, split} from 'ramda';
 
 import {
@@ -6,7 +5,8 @@ import {
     QUOTATION_CLOSE_MARKERS,
     QUOTATION_GENERIC_MARKERS,
     SENTENCE_END_MARKERS,
-} from '../src/constants';
+} from '../constants';
+
 import {
     bracketsClosePrefix,
     delimiterPrefix,
@@ -27,7 +27,7 @@ import {
     spaceSuffix,
     spaces,
     words,
-} from '../src/parsers';
+} from './';
 
 describe('fst', () => {
     it('should extract first string from string array', () => {
@@ -37,9 +37,8 @@ describe('fst', () => {
         expect(actual).toBe(expected);
     });
     it('should default to empty string if array is empty', () => {
-        const input = [];
         const expected = '';
-        const actual = fst(input);
+        const actual = fst([]);
         expect(actual).toBe(expected);
     });
 });
@@ -52,9 +51,8 @@ describe('snd', () => {
         expect(actual).toBe(expected);
     });
     it('should default to empty string if array is empty', () => {
-        const input = [];
         const expected = '';
-        const actual = snd(input);
+        const actual = snd([]);
         expect(actual).toBe(expected);
     });
 });
@@ -86,9 +84,8 @@ describe('sentences', () => {
     });
     it('should default to empty array on empty string', () => {
         const input = '';
-        const expected = [];
         const actual = sentences(input);
-        expect(actual).toStrictEqual(expected);
+        expect(actual).toStrictEqual([]);
     });
 });
 

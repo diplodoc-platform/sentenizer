@@ -1,6 +1,6 @@
 import {and, compose, map, or, reduce} from 'ramda';
 
-import {leftInitials} from '../../src/rules';
+import {leftInitials} from './';
 
 describe('leftInitials', () => {
     it('evaluates to true if left is part of the initials', () => {

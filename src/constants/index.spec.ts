@@ -16,12 +16,6 @@ import {
 } from 'ramda';
 
 import {
-    BRACKETS_CLOSE_MARKERS,
-    QUOTATION_CLOSE_MARKERS,
-    QUOTATION_GENERIC_MARKERS,
-    SENTENCE_END_MARKERS,
-} from '../../src/constants';
-import {
     rightBracketsClosePrefix,
     rightDelimiterPrefix,
     rightLacksSpacePrefix,
@@ -31,6 +25,13 @@ import {
     rightStartsWithLowercase,
     spaceBothSides,
 } from '../../src/rules';
+
+import {
+    BRACKETS_CLOSE_MARKERS,
+    QUOTATION_CLOSE_MARKERS,
+    QUOTATION_GENERIC_MARKERS,
+    SENTENCE_END_MARKERS,
+} from './';
 
 describe('spaceBothSides', () => {
     it('evaluates to true if both sides have spaces on their adjacent bounds', () => {

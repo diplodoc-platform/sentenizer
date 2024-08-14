@@ -15,15 +15,8 @@ import {
 } from 'ramda';
 
 import {leftAbbreviation, leftPairsTailAbbreviation, pairAbbreviation} from '../../src/rules';
-import {
-    HEAD,
-    HEAD_PAIR,
-    INITIALS,
-    OTHER,
-    OTHER_PAIR,
-    TAIL,
-    TAIL_PAIR,
-} from '../../src/constants/abbreviations';
+
+import {HEAD, HEAD_PAIR, INITIALS, OTHER, OTHER_PAIR, TAIL, TAIL_PAIR} from './abbreviations';
 
 const pairWith =
     (a: string) =>
