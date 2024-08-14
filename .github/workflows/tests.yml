@@ -27,11 +27,5 @@ jobs:
       - name: Install packages for project
         run: npm ci
       - run: npm run build
-      - name: Install packages for tests
-        run: |
-          cd tests
-          npm ci
       - name: Run tests
-        run: |
-          cd tests
-          npm run test
+        run: npm run test
