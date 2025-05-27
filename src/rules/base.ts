@@ -87,6 +87,11 @@ export const rightStartsWithLowercase = rule('rightStartsWithLowercase', [
     compose(startsWithLower, fstToken),
 ]);
 
+export const rightStartsWithUppercase = rule('rightStartsWithUppercase', [
+    _,
+    compose(startsWithUpper, fstToken),
+]);
+
 // todo: determine if right is a delimiter
 export const rightDelimiterPrefix = rule('rightDelimiterPrefix', [
     _,

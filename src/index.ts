@@ -16,6 +16,7 @@ import {
     rightStartsNewlineUppercased,
     rightStartsWithHardbreak,
     rightStartsWithLowercase,
+    rightStartsWithUppercase,
     spaceBothSides,
 } from './rules';
 
@@ -44,6 +45,7 @@ const breakCondition = anyPass([
     leftEndsWithHardbreak,
     rightStartsWithHardbreak,
     rightStartsNewlineUppercased,
+    rightStartsWithUppercase,
 ]);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
