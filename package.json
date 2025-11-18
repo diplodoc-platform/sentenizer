@@ -3,6 +3,10 @@
   "version": "0.0.8",
   "description": "text segmentation into sentences",
   "homepage": "https://github.com/diplodoc-platform/sentenizer",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:diplodoc-platform/sentenizer.git"
+  },
   "bugs": {
     "url": "https://github.com/diplodoc-platform/sentenizer/issues",
     "email": "moki-codes@yandex-team.ru"
