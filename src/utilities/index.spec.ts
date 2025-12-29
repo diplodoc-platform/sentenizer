@@ -1,4 +1,5 @@
 import {and, compose, map, or, reduce, split} from 'ramda';
+import {describe, expect, it} from 'vitest';
 
 import {
     allEqual,

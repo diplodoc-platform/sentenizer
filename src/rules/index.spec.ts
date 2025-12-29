@@ -1,4 +1,5 @@
 import {and, compose, map, or, reduce} from 'ramda';
+import {describe, expect, it} from 'vitest';
 
 import {leftInitials} from './';
 

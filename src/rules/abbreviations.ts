@@ -1,5 +1,6 @@
+import type {Pred} from 'ramda';
+
 import {
-    Pred,
     __,
     allPass,
     anyPass,

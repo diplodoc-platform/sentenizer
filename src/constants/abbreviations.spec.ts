@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-shadow */
+import {describe, expect, it} from 'vitest';
 import {
     and,
     compose,

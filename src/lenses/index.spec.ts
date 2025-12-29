@@ -1,4 +1,5 @@
 import {lensIndex, view} from 'ramda';
+import {describe, expect, it} from 'vitest';
 
 import {first, second} from './';
 

@@ -1,4 +1,5 @@
 import {and, compose, equals, filter, map, not, or, reduce, split} from 'ramda';
+import {describe, expect, it} from 'vitest';
 
 import {
     BRACKETS_CLOSE_MARKERS,

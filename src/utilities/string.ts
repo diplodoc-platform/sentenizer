@@ -1,4 +1,6 @@
-import {Pred, allPass, compose, identity, invoker, juxt, match, not, toLower, toUpper} from 'ramda';
+import type {Pred} from 'ramda';
+
+import {allPass, compose, identity, invoker, juxt, match, not, toLower, toUpper} from 'ramda';
 
 import {allEqual, lengthNonZero} from './list';
 
