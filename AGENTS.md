@@ -61,7 +61,7 @@ This file contains instructions for AI agents working with the `@diplodoc/senten
 - `package.json` — package metadata and dependencies
 - `tsconfig.json` — TypeScript configuration
 - `tsconfig.types.json` — TypeScript configuration for type definitions
-- `jest.config.js` — Jest test configuration
+- `vitest.config.mjs` — Vitest test configuration
 
 ## Tech Stack
 
@@ -71,7 +71,7 @@ This package follows the standard Diplodoc platform tech stack. See `.agents/dev
 
 - **Language**: TypeScript
 - **Runtime**: Node.js >=11.5.1 (npm requirement)
-- **Testing**: Jest with coverage
+- **Testing**: Vitest with coverage
 - **Build**: TypeScript compiler + esbuild
 - **Dependencies**:
   - `ramda` — functional programming utilities
@@ -162,7 +162,7 @@ const sentences = sentenize(text);
 **Testing**:
 
 - Test setup works in both modes
-- Uses Jest with coverage reporting
+- Uses Vitest with coverage reporting
 - When testing, ensure dependencies are properly resolved
 - Consider testing both modes if making significant changes
 
@@ -228,7 +228,7 @@ The segmentation uses a rule-based approach with two types of conditions:
 
 **Parameters**:
 
-- `WINDOW_WIDTH` — number of characters to examine on each side of boundary (default: 20)
+- `WINDOW_WIDTH` — number of characters to examine on each side of boundary (default: 10)
 
 ### Functional Programming
 
@@ -301,3 +301,168 @@ npm run typecheck  # TypeScript type checking
 6. **Used by Translation**: This package is critical for `@diplodoc/translation` text segmentation. Breaking changes may affect translation quality.
 
 7. **No External NLP Libraries**: The library is self-contained and doesn't use external NLP libraries, making it lightweight and fast.
+
+## Algorithm Details
+
+### Processing Flow
+
+1. **Paragraph Splitting**: Text is first split by double newlines (`\n\n+`) to separate paragraphs
+2. **Naive Sentence Extraction**: Each paragraph is split by sentence end markers (`.`, `!`, `?`, `…`) using regex
+3. **Window-Based Processing**: For each potential sentence boundary, a window of `WINDOW_WIDTH` (10) characters is examined on both sides
+4. **Rule Evaluation**: Rules are applied to determine if chunks should be joined or split:
+   - Rules are evaluated in order: break conditions first, then join conditions
+   - If a break condition matches, chunks are split
+   - If no break condition matches and a join condition matches, chunks are joined
+5. **Result Assembly**: Processed chunks are collected into final sentence array
+
+### Rule Evaluation Order
+
+Rules are evaluated using Ramda's `anyPass` and `allPass`:
+
+- **Break conditions** are checked first (using `anyPass` - if any matches, break)
+- **Join conditions** are checked if no break condition matches (using `anyPass` - if any matches, join)
+- If neither break nor join conditions match, chunks are split (default behavior)
+
+### Window-Based Context
+
+The `WINDOW_WIDTH` parameter (10 characters) limits the context examined for each rule:
+
+- **Left window**: Last 10 characters of left chunk
+- **Right window**: First 10 characters of right chunk
+- This balances accuracy with performance
+- Rules use these windows via `fstChars(10)` and `lstChars(10)` functions
+
+## Debugging
+
+### Debug Mode
+
+Rules support debug logging via `DEBUG` environment variable:
+
+```bash
+DEBUG=1 npm test
+```
+
+When `DEBUG=1`, each rule evaluation logs:
+
+- Rule name
+- Input arguments (left and right chunks)
+- Evaluation result (true/false)
+
+This helps understand why sentences are joined or split.
+
+### Playground
+
+The `src/playground.ts` file provides a simple way to test segmentation:
+
+```typescript
+import {sentenize} from './index';
+
+const text = 'Your test text here...';
+const sentences = sentenize(text);
+console.log(sentences);
+```
+
+Run with:
+
+```bash
+npx ts-node src/playground.ts
+```
+
+## Adding New Abbreviations
+
+To add new Russian abbreviations:
+
+1. **Determine category**:
+
+   - `INITIALS` — initials like "И. В."
+   - `HEAD` — abbreviation at start (e.g., "ст." for "ст.-слав.")
+   - `TAIL` — abbreviation at end (e.g., "тыс." for "тысяч")
+   - `OTHER` — other abbreviations (e.g., "сокр." for "сокращение")
+   - `HEAD_PAIR`, `TAIL_PAIR`, `OTHER_PAIR` — paired abbreviations (e.g., "т.е." for "то есть")
+
+2. **Add to appropriate map** in `src/constants/abbreviations.ts`:
+
+   ```typescript
+   const HEAD: StrBoolMap = {
+     existing: true,
+     new: true, // Add here
+   };
+   ```
+
+3. **Test thoroughly**:
+
+   - Add test cases in appropriate `.spec.ts` file
+   - Test with various contexts (before/after punctuation, with spaces, etc.)
+   - Verify it doesn't break existing cases
+
+4. **Consider edge cases**:
+   - Abbreviations at sentence boundaries
+   - Abbreviations with punctuation
+   - Abbreviations in quotes or brackets
+
+## Testing Guidelines
+
+### Writing Tests
+
+Tests are located alongside source files (`.spec.ts` files):
+
+```typescript
+import {describe, expect, it} from 'vitest';
+import {sentenize} from './';
+
+describe('sentenize', () => {
+  it('should handle your case', () => {
+    const input = 'Test text.';
+    const expected = ['Test text.'];
+    expect(sentenize(input)).toStrictEqual(expected);
+  });
+});
+```
+
+### Test Coverage
+
+Aim for high test coverage, especially for:
+
+- Rule logic (join/break conditions)
+- Edge cases (abbreviations, initials, punctuation)
+- Boundary conditions (empty text, single sentence, multiple paragraphs)
+
+### Running Tests
+
+```bash
+npm test              # Run all tests with coverage
+npm run test:watch    # Watch mode for development
+```
+
+## Performance Considerations
+
+1. **Window Size**: `WINDOW_WIDTH=10` limits context examination, keeping performance reasonable
+2. **Regex Patterns**: Patterns are compiled once and reused
+3. **Functional Composition**: Ramda's composition is efficient but can create deep call stacks
+4. **Text Length**: No hard limits, but very long texts (>100KB) may be slower
+5. **Memory**: Each sentence chunk is stored in memory during processing
+
+## Known Limitations
+
+1. **Language-Specific**: Optimized for Russian text. May not work well for other languages
+2. **Rule-Based**: Hand-crafted rules may miss edge cases that ML approaches would handle
+3. **Context Window**: Limited to 10 characters on each side - may miss long-distance dependencies
+4. **No Learning**: Rules are static - cannot adapt to new patterns automatically
+5. **Abbreviation Coverage**: Abbreviation list may be incomplete for specialized domains
+
+## Integration Details
+
+### Usage in Translation Package
+
+`@diplodoc/translation` uses `sentenize` in two places:
+
+1. **`src/experiment/utils/segmentation.ts`**: Experimental segmentation utilities
+2. **`src/consumer/split.ts`**: Main translation consumer that splits content into sentences
+
+The segmentation is critical for translation quality, as incorrect sentence boundaries can lead to:
+
+- Incorrect translation context
+- Broken sentence structure
+- Loss of meaning
+
+**Important**: Changes to `sentenize` behavior may affect translation output. Always test with translation package when making significant changes.
