@@ -32,6 +32,7 @@
     "build": "npm run build:clean && npm run build:code",
     "build:code": "tsc -p tsconfig.types.json && node esbuild/build.js",
     "build:clean": "rm -rf lib",
+    "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run build",
     "lint": "lint update && lint",
     "lint:fix": "lint update && lint fix",

@@ -26,5 +26,11 @@ jobs:
         shell: bash
       - name: Install Packages
         run: npm ci
+      - name: Run type check
+        run: npm run typecheck
       - name: Lint Files
         run: npm run lint
+      - name: Run tests
+        run: npm test
+      - name: Build package
+        run: npm run build
