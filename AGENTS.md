@@ -315,7 +315,7 @@ npm run typecheck  # TypeScript type checking
 
 3. **Functional Style**: The codebase uses Ramda for functional programming. Understanding Ramda's API (compose, lens, predicates) is helpful when modifying code.
 
-4. **Window-Based Processing**: Rules examine a window of characters (default 20) on each side of potential sentence boundaries. This allows context-aware decisions.
+4. **Window-Based Processing**: Rules examine a window of characters on each side of potential sentence boundaries. The actual window size is defined in `src/index.ts` (see `leftPreprocessor` and `rightPreprocessor`). This allows context-aware decisions.
 
 5. **Standalone Compatibility**: This package must work both in metapackage and standalone modes. Always test both scenarios.
 
@@ -329,7 +329,7 @@ npm run typecheck  # TypeScript type checking
 
 1. **Paragraph Splitting**: Text is first split by double newlines (`\n\n+`) to separate paragraphs
 2. **Naive Sentence Extraction**: Each paragraph is split by sentence end markers (`.`, `!`, `?`, `…`) using regex
-3. **Window-Based Processing**: For each potential sentence boundary, a window of `WINDOW_WIDTH` (10) characters is examined on both sides
+3. **Window-Based Processing**: For each potential sentence boundary, a window of characters is examined on both sides. The window size is defined in `src/index.ts` where `leftPreprocessor` and `rightPreprocessor` are created. Check these lines to see the actual values used. Note: `WINDOW_WIDTH` constant in `src/constants/parameters.ts` is the default parameter for `fstChars`/`lstChars` functions, but the actual preprocessing may use a different value.
 4. **Rule Evaluation**: Rules are applied to determine if chunks should be joined or split:
    - Rules are evaluated in order: break conditions first, then join conditions
    - If a break condition matches, chunks are split
@@ -346,12 +346,13 @@ Rules are evaluated using Ramda's `anyPass` and `allPass`:
 
 ### Window-Based Context
 
-The `WINDOW_WIDTH` parameter (10 characters) limits the context examined for each rule:
+The window size limits the context examined for each rule. To find the actual window size:
 
-- **Left window**: Last 10 characters of left chunk
-- **Right window**: First 10 characters of right chunk
-- This balances accuracy with performance
-- Rules use these windows via `fstChars(10)` and `lstChars(10)` functions
+1. **Check `src/index.ts`** — lines 23-24 define `leftPreprocessor` and `rightPreprocessor` using `lstChars()` and `fstChars()` with specific width values
+2. **Default parameter**: `WINDOW_WIDTH` constant in `src/constants/parameters.ts` is the default parameter for `fstChars`/`lstChars` functions, but the actual preprocessing may use a different value
+3. **Functions**: `fstChars(width)` and `lstChars(width)` in `src/parsers/index.ts` extract the first/last N characters from chunks
+
+The window size balances accuracy with performance. Rules use these windows via the preprocessor functions defined in `src/index.ts`.
 
 ## Debugging
 
@@ -453,17 +454,17 @@ npm run test:watch    # Watch mode for development
 
 ## Performance Considerations
 
-1. **Window Size**: `WINDOW_WIDTH=10` limits context examination, keeping performance reasonable
+1. **Window Size**: The window size (defined in `src/index.ts` for preprocessing) limits context examination, keeping performance reasonable. Check `leftPreprocessor` and `rightPreprocessor` in `src/index.ts` to see the actual value used.
 2. **Regex Patterns**: Patterns are compiled once and reused
 3. **Functional Composition**: Ramda's composition is efficient but can create deep call stacks
-4. **Text Length**: No hard limits, but very long texts (>100KB) may be slower
+4. **Text Length**: No hard limits, but very long texts may be slower. Performance depends on text length and number of sentence boundaries.
 5. **Memory**: Each sentence chunk is stored in memory during processing
 
 ## Known Limitations
 
 1. **Language-Specific**: Optimized for Russian text. May not work well for other languages
 2. **Rule-Based**: Hand-crafted rules may miss edge cases that ML approaches would handle
-3. **Context Window**: Limited to 10 characters on each side - may miss long-distance dependencies
+3. **Context Window**: Limited window size (check `src/index.ts` for actual value) on each side - may miss long-distance dependencies
 4. **No Learning**: Rules are static - cannot adapt to new patterns automatically
 5. **Abbreviation Coverage**: Abbreviation list may be incomplete for specialized domains
 
@@ -471,10 +472,13 @@ npm run test:watch    # Watch mode for development
 
 ### Usage in Translation Package
 
-`@diplodoc/translation` uses `sentenize` in two places:
+`@diplodoc/translation` uses `sentenize` for text segmentation. To find all usage locations:
 
-1. **`src/experiment/utils/segmentation.ts`**: Experimental segmentation utilities
-2. **`src/consumer/split.ts`**: Main translation consumer that splits content into sentences
+1. **Search the translation package** for imports of `@diplodoc/sentenizer` or `sentenize`
+2. **Check for files** that import or use the `sentenize` function
+3. **Common locations** may include:
+   - Experimental utilities (e.g., `src/experiment/utils/segmentation.ts`)
+   - Main translation consumers (e.g., `src/consumer/split.ts`)
 
 The segmentation is critical for translation quality, as incorrect sentence boundaries can lead to:
 
@@ -482,4 +486,4 @@ The segmentation is critical for translation quality, as incorrect sentence boun
 - Broken sentence structure
 - Loss of meaning
 
-**Important**: Changes to `sentenize` behavior may affect translation output. Always test with translation package when making significant changes.
+**Important**: Changes to `sentenize` behavior may affect translation output. Always test with translation package when making significant changes. To verify current usage, search the translation package codebase for `sentenize` imports.
