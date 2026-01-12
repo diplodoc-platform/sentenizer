@@ -192,43 +192,64 @@ The segmentation uses a rule-based approach with two types of conditions:
 
 **Join Conditions** (chunks should be merged):
 
-- `spaceBothSides` — space on both sides of boundary
-- `rightLacksSpacePrefix` — right chunk lacks space prefix
-- `rightStartsWithLowercase` — right chunk starts with lowercase (continuation)
-- `rightDelimiterPrefix` — right chunk starts with delimiter
-- `rightQuotationGenericPrefix` — right chunk starts with quotation mark
-- `rightQuotationClosePrefix` — right chunk starts with closing quotation
-- `rightBracketsClosePrefix` — right chunk starts with closing bracket
-- `rightOnlySpaces` — right chunk contains only spaces
-- `leftInitials` — left chunk ends with initials (e.g., "И. В.")
-- `leftAbbreviation` — left chunk ends with abbreviation
-- `pairAbbreviation` — pair forms abbreviation
-- `leftPairsTailAbbreviation` — left chunk ends with abbreviation tail
+Join conditions are exported from `src/rules/base.ts` and `src/rules/abbreviations.ts`. To find all currently used join conditions:
+
+1. **Check `src/index.ts`** — the `joinCondition` array (lines ~28-41) lists all active join conditions imported from rules
+2. **Source files**:
+   - `src/rules/base.ts` — base join conditions using the `rule()` helper (e.g., `spaceBothSides`, `rightStartsWithLowercase`, `rightQuotationGenericPrefix`)
+   - `src/rules/abbreviations.ts` — abbreviation-related join conditions (e.g., `leftAbbreviation`, `pairAbbreviation`, `leftPairsTailAbbreviation`)
+3. **Naming patterns**:
+   - `right*` — conditions checking the right chunk
+   - `left*` — conditions checking the left chunk
+   - `*Abbreviation*` — abbreviation-related conditions
+   - `*Initials*` — initials-related conditions
+
+**To add a new join condition**: Create a function in `src/rules/base.ts` or `src/rules/abbreviations.ts` using the `rule()` helper, then add it to the `joinCondition` array in `src/index.ts`.
 
 **Break Conditions** (chunks should be split):
 
-- `leftEndsWithHardbreak` — left chunk ends with hard break (newline)
-- `rightStartsWithHardbreak` — right chunk starts with hard break
-- `rightStartsNewlineUppercased` — right chunk starts on new line with uppercase
+Break conditions are exported from `src/rules/base.ts`. To find all currently used break conditions:
+
+1. **Check `src/index.ts`** — the `breakCondition` array (lines ~43-47) lists all active break conditions imported from rules
+2. **Source file**: `src/rules/base.ts` — all break conditions are defined here
+3. **Naming patterns**: Functions with names containing `Hardbreak` or `Uppercased` (e.g., `leftEndsWithHardbreak`, `rightStartsWithHardbreak`, `rightStartsNewlineUppercased`)
+
+**Important**: Break conditions are the only conditions that force a split (all other conditions are join conditions). They are evaluated first in the rule evaluation order (see `src/index.ts` line 69: `if (!breaks([left, right]) && join([left, right]))`).
+
+**To add a new break condition**: Create a function in `src/rules/base.ts` using the `rule()` helper, then add it to the `breakCondition` array in `src/index.ts`.
 
 ### Constants
 
-**Markers**:
+Constants are organized by category in `src/constants/`:
 
-- `SENTENCE_END_MARKERS` — sentence ending punctuation (`.`, `!`, `?`)
+**Markers** (`src/constants/markers.ts`):
+
+Contains string constants for punctuation and markers:
+
+- `SENTENCE_END_MARKERS` — sentence ending punctuation
 - `QUOTATION_GENERIC_MARKERS` — quotation marks
 - `QUOTATION_CLOSE_MARKERS` — closing quotation marks
 - `BRACKETS_CLOSE_MARKERS` — closing brackets
 
-**Abbreviations**:
+To see current values, check `src/constants/markers.ts`. These are used by parsers in `src/parsers/` to identify sentence boundaries and punctuation.
 
-- `INITIALS` — initials patterns (e.g., "И. В.")
-- `HEAD`, `TAIL`, `OTHER` — abbreviation parts
-- `HEAD_PAIR`, `TAIL_PAIR`, `OTHER_PAIR` — abbreviation pairs
+**Abbreviations** (`src/constants/abbreviations.ts`):
 
-**Parameters**:
+Contains maps (`StrBoolMap`) for Russian abbreviations organized by category:
 
-- `WINDOW_WIDTH` — number of characters to examine on each side of boundary (default: 10)
+- `INITIALS` — initials patterns (e.g., "И. В.", "Дж.")
+- `HEAD`, `TAIL`, `OTHER` — single-word abbreviations (head = start, tail = end, other = standalone)
+- `HEAD_PAIR`, `TAIL_PAIR`, `OTHER_PAIR` — two-word abbreviation pairs (e.g., "т.е.", "и т.д.")
+
+To see all abbreviations or add new ones, check `src/constants/abbreviations.ts`. Each map is a `StrBoolMap` where keys are lowercase abbreviation patterns and values are `true`.
+
+**Parameters** (`src/constants/parameters.ts`):
+
+Contains configuration parameters:
+
+- `WINDOW_WIDTH` — number of characters to examine on each side of boundary
+
+To see current parameter values, check `src/constants/parameters.ts`. These control algorithm behavior and can be adjusted for performance/accuracy trade-offs.
 
 ### Functional Programming
 
@@ -372,33 +393,29 @@ npx ts-node src/playground.ts
 
 To add new Russian abbreviations:
 
-1. **Determine category**:
-
-   - `INITIALS` — initials like "И. В."
-   - `HEAD` — abbreviation at start (e.g., "ст." for "ст.-слав.")
+1. **Open `src/constants/abbreviations.ts`** and identify the appropriate category:
+   - `INITIALS` — initials like "И. В.", "Дж."
+   - `HEAD` — abbreviation at start of compound word (e.g., "ст." for "ст.-слав.")
    - `TAIL` — abbreviation at end (e.g., "тыс." for "тысяч")
-   - `OTHER` — other abbreviations (e.g., "сокр." for "сокращение")
-   - `HEAD_PAIR`, `TAIL_PAIR`, `OTHER_PAIR` — paired abbreviations (e.g., "т.е." for "то есть")
+   - `OTHER` — standalone abbreviations (e.g., "сокр." for "сокращение")
+   - `HEAD_PAIR`, `TAIL_PAIR`, `OTHER_PAIR` — two-word abbreviation pairs (e.g., "т.е." for "то есть", "и т.д." for "и так далее")
 
-2. **Add to appropriate map** in `src/constants/abbreviations.ts`:
-
-   ```typescript
-   const HEAD: StrBoolMap = {
-     existing: true,
-     new: true, // Add here
-   };
-   ```
+2. **Add the abbreviation** to the appropriate map:
+   - Use lowercase key (abbreviations are normalized to lowercase during matching)
+   - Set value to `true`
+   - For pair abbreviations, use dot-separated format (e.g., `'т.е': true`)
 
 3. **Test thoroughly**:
-
-   - Add test cases in appropriate `.spec.ts` file
-   - Test with various contexts (before/after punctuation, with spaces, etc.)
+   - Add test cases in appropriate `.spec.ts` file (check existing test files for patterns)
+   - Test with various contexts (before/after punctuation, with spaces, at sentence boundaries)
    - Verify it doesn't break existing cases
+   - Consider edge cases: abbreviations in quotes, brackets, with different punctuation
 
-4. **Consider edge cases**:
-   - Abbreviations at sentence boundaries
-   - Abbreviations with punctuation
-   - Abbreviations in quotes or brackets
+**Note**: The abbreviation matching logic is in `src/rules/abbreviations.ts`. If you need to understand how abbreviations are detected, check:
+
+- `leftAbbreviation` — checks if left chunk ends with abbreviation
+- `pairAbbreviation` — checks if pair forms abbreviation
+- `leftPairsTailAbbreviation` — checks if split occurs at tail of pair abbreviation
 
 ## Testing Guidelines
 
