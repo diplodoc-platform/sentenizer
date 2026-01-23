@@ -4,6 +4,8 @@ import {
     BRACKETS_CLOSE_MARKERS,
     QUOTATION_CLOSE_MARKERS,
     QUOTATION_GENERIC_MARKERS,
+    REGEXP_PAIRS,
+    RegExpPair,
     SENTENCE_END_MARKERS,
     WINDOW_WIDTH,
 } from '../constants';
@@ -130,8 +132,41 @@ const dotSuffixRegExp = new RegExp(dotSuffixPattern, dotSuffixFlags);
 
 const dotSuffix = compose(defaultTo(''), snd, match(dotSuffixRegExp));
 
+function isUnpairedStr(str: string, regExp: RegExpPair) {
+    const first = str?.match(regExp[0]()) ?? [];
+    const second = str?.match(regExp[1]()) ?? [];
+    return first.length !== second.length;
+}
+
+function isUnpaired(str: string) {
+    for (const pair of REGEXP_PAIRS) {
+        if (isUnpairedStr(str, pair)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function groupPairs(parsed: string[]) {
+    let index = 0;
+
+    while (index < parsed.length - 1) {
+        const current = parsed[index];
+        const next = parsed[index + 1] || '';
+
+        if (isUnpaired(current)) {
+            parsed.splice(index, 2, current + next);
+        } else {
+            index++;
+        }
+    }
+
+    return parsed;
+}
+
 export {
     sentences,
+    groupPairs,
     words,
     delimiters,
     fst,
