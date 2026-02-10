@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.10](https://github.com/diplodoc-platform/sentenizer/compare/v0.0.9...v0.0.10) (2026-02-10)
+
+
+### Bug Fixes
+
+* Update infra to v1.13.2 ([e7561d2](https://github.com/diplodoc-platform/sentenizer/commit/e7561d233efd73dacda5c6086b06af89617162ba))
+
 ## [0.0.9](https://github.com/diplodoc-platform/sentenizer/compare/v0.0.8...v0.0.9) (2026-01-12)
 
 
