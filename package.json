@@ -46,7 +46,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@diplodoc/lint": "^1.9.2",
+    "@diplodoc/lint": "^1.13.2",
     "@diplodoc/tsconfig": "^1.0.2",
     "@esbuild-plugins/tsconfig-paths": "^0.1.2",
     "@types/node": "^22.19.7",
