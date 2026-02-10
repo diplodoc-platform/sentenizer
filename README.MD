@@ -1,4 +1,9 @@
 [![NPM version](https://img.shields.io/npm/v/@diplodoc/sentenizer.svg?style=flat)](https://www.npmjs.org/package/@diplodoc/sentenizer)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=diplodoc-platform_sentenizer&metric=alert_status)](https://sonarcloud.io/summary/overall?id=diplodoc-platform_sentenizer)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=diplodoc-platform_sentenizer&metric=coverage)](https://sonarcloud.io/summary/overall?id=diplodoc-platform_sentenizer)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=diplodoc-platform_sentenizer&metric=sqale_rating)](https://sonarcloud.io/summary/overall?id=diplodoc-platform_sentenizer)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=diplodoc-platform_sentenizer&metric=reliability_rating)](https://sonarcloud.io/summary/overall?id=diplodoc-platform_sentenizer)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=diplodoc-platform_sentenizer&metric=security_rating)](https://sonarcloud.io/summary/overall?id=diplodoc-platform_sentenizer)
 
 # @diplodoc/sentenizer
 
