@@ -27,8 +27,9 @@
     "lib/"
   ],
   "scripts": {
-    "test": "vitest --run --coverage",
+    "test": "vitest --run",
     "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "build": "npm run build:clean && npm run build:code",
     "build:code": "tsc -p tsconfig.types.json && node esbuild/build.js",
     "build:clean": "rm -rf lib",
