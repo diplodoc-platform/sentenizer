@@ -1,6 +1,6 @@
 import {anyPass, call, compose, zipWith} from 'ramda';
 
-import {fstChars, lstChars, sentences} from './parsers';
+import {fstChars, groupPairs, lstChars, sentences} from './parsers';
 import {
     leftAbbreviation,
     leftEndsWithHardbreak,
@@ -80,5 +80,5 @@ export function sentenize(text: string): string[] {
         }
     }
 
-    return parsed;
+    return groupPairs(parsed);
 }

@@ -17,6 +17,7 @@ import {
     fstChars,
     fstToken,
     fstWord,
+    groupPairs,
     lstChars,
     lstToken,
     lstWord,
@@ -74,6 +75,24 @@ describe('sentences', () => {
         ];
         for (let i = 0; i < input.length; i++) {
             const actual = sentences(input[i]);
+            expect(actual).toStrictEqual(expected[i]);
+        }
+    });
+    it('should split text on delimiter(s) with groupPairs special symbols **', () => {
+        const input = [
+            'Предложение **один.Предложение два.Предложение** три.Предложение четыре.',
+            'Предложение **один?Предложение два?Предложение** три?Предложение четыре?',
+            'Предложение **один!Предложение два!Предложение** три!Предложение четыре!',
+            'Предложение **один…Предложение два…Предложение** три…Предложение четыре…',
+        ];
+        const expected = [
+            ['Предложение **один.Предложение два.Предложение** три.', 'Предложение четыре.'],
+            ['Предложение **один?Предложение два?Предложение** три?', 'Предложение четыре?'],
+            ['Предложение **один!Предложение два!Предложение** три!', 'Предложение четыре!'],
+            ['Предложение **один…Предложение два…Предложение** три…', 'Предложение четыре…'],
+        ];
+        for (let i = 0; i < input.length; i++) {
+            const actual = groupPairs(sentences(input[i]));
             expect(actual).toStrictEqual(expected[i]);
         }
     });
