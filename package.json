@@ -55,7 +55,7 @@
     "typescript": "^5.0.4",
     "vite": "^6.0.5",
     "vitest": "^3.0.8",
-    "@diplodoc/infra": "1.0.0"
+    "@diplodoc/infra": "2.0.0"
   },
   "dependencies": {
     "ramda": "^0.28.0"
