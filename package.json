@@ -38,7 +38,8 @@
     "lint": "lint",
     "lint:fix": "lint fix",
     "pre-commit": "lint-staged",
-    "prepare": "husky || true"
+    "prepare": "husky || true",
+    "lock": "npm install --no-workspaces --package-lock-only --ignore-scripts"
   },
   "author": {
     "name": "moki-codes",
@@ -55,7 +56,7 @@
     "typescript": "^5.0.4",
     "vite": "^6.0.5",
     "vitest": "^3.0.8",
-    "@diplodoc/infra": "2.0.7"
+    "@diplodoc/infra": "2.1.0"
   },
   "dependencies": {
     "ramda": "^0.28.0"
