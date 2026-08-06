@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.11](https://github.com/diplodoc-platform/sentenizer/compare/v0.0.10...v0.0.11) (2026-08-06)
+
+
+### Bug Fixes
+
+* Upgrade typescript to 5.9.3 DOCSTOOLS-6357 ([e35e3dd](https://github.com/diplodoc-platform/sentenizer/commit/e35e3dd493079e2ccd25de1daac15c46cecbad7f))
+* Upgrade typescript to 6.0.3 DOCSTOOLS-6359 ([b96b47f](https://github.com/diplodoc-platform/sentenizer/commit/b96b47f629fac4e91554dab8b7d4606ada984152))
+
 ## [0.0.10](https://github.com/diplodoc-platform/sentenizer/compare/v0.0.9...v0.0.10) (2026-05-28)
 
 
