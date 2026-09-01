@@ -8,3 +8,6 @@ export {
 export {WINDOW_WIDTH} from './parameters';
 
 export {INITIALS, HEAD, TAIL, OTHER, HEAD_PAIR, TAIL_PAIR, OTHER_PAIR} from './abbreviations';
+
+export {REGEXP_PAIRS} from './pairs';
+export type {RegExpPair} from './pairs';
