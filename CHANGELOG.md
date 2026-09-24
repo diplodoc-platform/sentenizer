@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.0.12](https://github.com/diplodoc-platform/sentenizer/compare/v0.0.11...v0.0.12) (2026-09-24)
+
+
+### Bug Fixes
+
+* keep cyrillic abbreviations in capitals and cover acronyms with tests DOCSTOOLS-6830 ([ef4ac55](https://github.com/diplodoc-platform/sentenizer/commit/ef4ac55a5ae89c581547a2eac25261ed7232c340))
+* know english abbreviations and read the last line of a multi-line text DOCSTOOLS-6830 ([0356a59](https://github.com/diplodoc-platform/sentenizer/commit/0356a59cf43bf071b184807535e920d652d12ce3))
+* split after an acronym in capitals followed by a regular sentence DOCSTOOLS-6830 ([cf61531](https://github.com/diplodoc-platform/sentenizer/commit/cf61531eedc8b0287fdfb3cdd72bbe24645f7a85))
+
 ## [0.0.11](https://github.com/diplodoc-platform/sentenizer/compare/v0.0.10...v0.0.11) (2026-08-06)
 
 
