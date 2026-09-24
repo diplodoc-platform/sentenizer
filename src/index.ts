@@ -3,9 +3,11 @@ import {anyPass, call, compose, zipWith} from 'ramda';
 import {fstChars, lstChars, sentences} from './parsers';
 import {
     leftAbbreviation,
+    leftDottedAbbreviation,
     leftEndsWithHardbreak,
     leftInitials,
     leftPairsTailAbbreviation,
+    leftSoftTailAbbreviation,
     pairAbbreviation,
     rightBracketsClosePrefix,
     rightDelimiterPrefix,
@@ -38,6 +40,8 @@ const joinCondition = anyPass([
     leftAbbreviation,
     pairAbbreviation,
     leftPairsTailAbbreviation,
+    leftSoftTailAbbreviation,
+    leftDottedAbbreviation,
 ]);
 
 const breakCondition = anyPass([
