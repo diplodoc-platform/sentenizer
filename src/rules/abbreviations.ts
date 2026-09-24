@@ -90,11 +90,15 @@ const isLeftAbbreviation = compose(
 
 const isCaps = allPass([isUpper, compose(lt(1), length)]);
 
-// an acronym written in capitals, like MR or API, followed by a sentence
-// in regular case is not the abbreviation it happens to spell (mr., api.);
-// in text written in capitals throughout it still is
+// latin letters only: capitals like ИМ. or Г. are cyrillic abbreviations
+// written in upper case (улица ИМ. Ленина), latin ones are acronyms
+const isLatin = (word: string) => /^[A-Za-z]+$/.test(word);
+
+// an acronym written in latin capitals, like MR or DR, followed by a
+// sentence in regular case is not the abbreviation it happens to spell
+// (mr., dr.); in text written in capitals throughout it still is
 const isLeftAcronym = allPass([
-    compose(isCaps, omitNonAlphaStart, lstWord, lstToken, fst),
+    compose(allPass([isCaps, isLatin]) as Pred, omitNonAlphaStart, lstWord, lstToken, fst),
     compose(not, isCaps, fstWord, snd) as Pred,
 ]);
 
