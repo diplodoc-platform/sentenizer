@@ -18,7 +18,16 @@ import {
     zipWith,
 } from 'ramda';
 
-import {HEAD, HEAD_PAIR, INITIALS, OTHER, OTHER_PAIR, TAIL, TAIL_PAIR} from 'src/constants';
+import {
+    HEAD,
+    HEAD_PAIR,
+    INITIALS,
+    OTHER,
+    OTHER_PAIR,
+    SOFT_TAIL,
+    TAIL,
+    TAIL_PAIR,
+} from 'src/constants';
 
 import {isUpper, lengthNonZero, startsWithLower} from '../utilities';
 import {
@@ -115,7 +124,7 @@ export const leftAbbreviation = allPass([
 const rightLowercaseOrCaps = compose(anyPass([startsWithLower, isCaps]), fstWord, snd);
 
 // portion of the source <s> before target <t>
-const before = (s: string) => (t: string) => s.slice(0, Math.max(s.indexOf(t), 0));
+const before = (s: string) => (t: string) => s.slice(0, Math.max(s.lastIndexOf(t), 0));
 
 // does left contain pair abbreviation
 const isLeftPairsTail = (left: string) => {
@@ -136,5 +145,33 @@ const isLeftPairsTail = (left: string) => {
 export const leftPairsTailAbbreviation = allPass([
     compose(isDotDelimiter, lstToken, fst),
     compose(isLeftPairsTail, fst) as Pred,
+    rightLowercaseOrCaps,
+]);
+
+// soft tail abbreviation conditions:
+//     * delimiter is dot
+//     * lefts side right most word is a soft tail abbreviation (etc.)
+//     * right word starts with lowercase or entirely in uppercase
+export const leftSoftTailAbbreviation = allPass([
+    compose(isDotDelimiter, lstToken, fst),
+    compose(
+        (word: string) => Boolean(SOFT_TAIL[word]),
+        toLower,
+        omitNonAlphaStart,
+        lstWord,
+        lstToken,
+        fst,
+    ) as Pred,
+    rightLowercaseOrCaps,
+]);
+
+// letters with dots, like т.ч. or e.g., known or not
+const isDotted = (token: string) => /^(?:\p{L}\.){2,}$/u.test(token);
+
+// dotted abbreviation conditions:
+//     * lefts side right most token is letters with dots (т.ч., т.о.)
+//     * right word starts with lowercase or entirely in uppercase
+export const leftDottedAbbreviation = allPass([
+    compose(isDotted, omitNonAlphaStart, lstToken, fst) as Pred,
     rightLowercaseOrCaps,
 ]);

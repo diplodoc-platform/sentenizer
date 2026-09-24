@@ -46,8 +46,9 @@ const fstToken = compose(defaultTo(''), snd, match(fstTokenRegExp));
 const fstWord = compose(fstToken, words);
 
 // extract last token from sentence
+// no `m` flag: `$` is the end of the text, not of its first line
 const lstTokenPattern = /([^\s]+)\s*$/;
-const lstTokenFlags = 'mu';
+const lstTokenFlags = 'u';
 const lstTokenRegExp = new RegExp(lstTokenPattern, lstTokenFlags);
 
 const lstToken = compose(defaultTo(''), snd, match(lstTokenRegExp));
@@ -71,8 +72,9 @@ const fstChars = (width = WINDOW_WIDTH) => {
 
 // extract last width (default WINDOW_WIDTH) characters
 const lstChars = (width = WINDOW_WIDTH) => {
+    // no `m` flag: `$` is the end of the text, not of its first line
     const lstCharsPattern = `.{0,${width}}$`;
-    const lstCharsFlags = 'gmu';
+    const lstCharsFlags = 'gu';
     const lstCharsRegExp = new RegExp(lstCharsPattern, lstCharsFlags);
 
     return compose(defaultTo(''), fst, match(lstCharsRegExp));

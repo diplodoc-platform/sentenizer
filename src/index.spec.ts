@@ -76,4 +76,59 @@ describe('sentenize naive', function () {
     ])('should split %j around acronyms and abbreviations', (input, expected) => {
         expect(sentenize(input)).toStrictEqual(expected);
     });
+
+    // English abbreviations of the dictionaries: kept in the sentence like
+    // their Russian counterparts.
+    it.each([
+        ['See Fig. 3 and Sec. 2.1 for details.', ['See Fig. 3 and Sec. 2.1 for details.']],
+        ['See p. 12 or pp. 3-5, cf. the appendix.', ['See p. 12 or pp. 3-5, cf. the appendix.']],
+        ['Incl. taxes, approx. 5 items.', ['Incl. taxes, approx. 5 items.']],
+        ['Смотрите табл. 2 ниже.', ['Смотрите табл. 2 ниже.']],
+        ['Use a proxy, e.g. nginx.', ['Use a proxy, e.g. nginx.']],
+        ['Done. Next sentence.', ['Done.', ' Next sentence.']],
+    ])('should keep %j', (input, expected) => {
+        expect(sentenize(input)).toStrictEqual(expected);
+    });
+
+    // A pair abbreviation written with a space ends the text before a word in
+    // capitals; its last letter used to be looked up at its first occurrence
+    // in the text (the "е" of "есть").
+    it.each([
+        ['То есть т. е. КОД в тексте.', ['То есть т. е. КОД в тексте.']],
+        ['То есть т.е. КОД в тексте.', ['То есть т.е. КОД в тексте.']],
+        ['Some e.g. CODE in text.', ['Some e.g. CODE in text.']],
+        ['Some i.e. CODE in text.', ['Some i.e. CODE in text.']],
+    ])('should keep a pair abbreviation before capitals: %j', (input, expected) => {
+        expect(sentenize(input)).toStrictEqual(expected);
+    });
+
+    // etc. often ends a sentence: kept in it only before a word that does
+    // not start a new one, like the Russian "т. д."
+    it.each([
+        ['Rows, columns, etc. Next sentence.', ['Rows, columns, etc.', ' Next sentence.']],
+        ['Rows, columns, etc. and more.', ['Rows, columns, etc. and more.']],
+        ['Rows, columns, etc. CODE in text.', ['Rows, columns, etc. CODE in text.']],
+    ])('should split after etc. only before a new sentence: %j', (input, expected) => {
+        expect(sentenize(input)).toStrictEqual(expected);
+    });
+
+    // Rules look at the text right before the delimiter, not at the end of
+    // the first line of a multi-line paragraph.
+    it.each([
+        ['Type: bool\nFinite (e.g. CODE there).', ['Type: bool\nFinite (e.g. CODE there).']],
+        ['Тип: bool\nКонечен (см. КОД там).', ['Тип: bool\nКонечен (см. КОД там).']],
+        ['Тип: bool\nКонечен (см. Далее там).', ['Тип: bool\nКонечен (см. Далее там).']],
+    ])('should read the last line of a multi-line text: %j', (input, expected) => {
+        expect(sentenize(input)).toStrictEqual(expected);
+    });
+
+    // Letters with dots are an abbreviation whether the dictionaries know it
+    // or not, kept in the sentence before a word that does not start a new one.
+    it.each([
+        ['В т.ч. КОД в тексте.', ['В т.ч. КОД в тексте.']],
+        ['В т.ч. и другие.', ['В т.ч. и другие.']],
+        ['В т.ч. Далее текст.', ['В т.ч.', ' Далее текст.']],
+    ])('should keep letters with dots: %j', (input, expected) => {
+        expect(sentenize(input)).toStrictEqual(expected);
+    });
 });

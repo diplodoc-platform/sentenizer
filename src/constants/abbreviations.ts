@@ -116,6 +116,16 @@ const HEAD: StrBoolMap = {
     'гос': true,  // гос. экзамены
     'отм': true,  // от отм. 0.000
     'доб': true,  // доб. 1243 (телефон)
+    'табл': true,  // см. табл. 2
+    'cf': true,  // cf. Section 2
+    'incl': true,
+    'approx': true,
+    'fig': true,  // see Fig. 3
+    'figs': true,
+    'eq': true,
+    'sec': true,  // Sec. 2.1
+    'p': true,  // see p. 12
+    'pp': true,
 }
 
 // prettier-ignore
@@ -154,6 +164,13 @@ const TAIL: StrBoolMap = {
     'al': true,  // North et al.
 };
 
+// abbreviations that often end a sentence: kept in it only when the next
+// word does not start a new one (lower case or capitals), like "т. д."
+// prettier-ignore
+const SOFT_TAIL: StrBoolMap = {
+    'etc': true,
+};
+
 // prettier-ignore
 const OTHER: StrBoolMap = {
     'сокр': true,
@@ -176,6 +193,8 @@ const HEAD_PAIR = {
     'к.т': true,
     'т.н': true,  // к.т.н
     'л.д': true,  // т. 1 л.д. 85-89
+    'e.g': true,
+    'i.e': true,
 };
 
 // prettier-ignore
@@ -203,4 +222,4 @@ const OTHER_PAIR = {
     'муж.р': true,
 }
 
-export {INITIALS, HEAD, TAIL, OTHER, HEAD_PAIR, TAIL_PAIR, OTHER_PAIR};
+export {INITIALS, HEAD, TAIL, SOFT_TAIL, OTHER, HEAD_PAIR, TAIL_PAIR, OTHER_PAIR};
