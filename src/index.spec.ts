@@ -46,4 +46,34 @@ describe('sentenize naive', function () {
         const input = 'Встреча с Mr. Smith прошла успешно.';
         expect(sentenize(input)).toStrictEqual([input]);
     });
+    // Acronyms in latin capitals end a sentence; abbreviations, initials and
+    // cyrillic abbreviations written in capitals do not.
+    it.each([
+        [
+            'Операции sort и MR. Эта опция включает подстройку.',
+            ['Операции sort и MR.', ' Эта опция включает подстройку.'],
+        ],
+        ['Use the REST API. Then call it.', ['Use the REST API.', ' Then call it.']],
+        ['Created in the USSR. Later moved.', ['Created in the USSR.', ' Later moved.']],
+        ['Контроль в СССР. Далее текст.', ['Контроль в СССР.', ' Далее текст.']],
+        ['Опция для MR. это продолжение.', ['Опция для MR. это продолжение.']],
+        ['Встреча с Mr. Smith прошла.', ['Встреча с Mr. Smith прошла.']],
+        ['Call Dr. Who now.', ['Call Dr. Who now.']],
+        ['MR. SMITH ARRIVED.', ['MR. SMITH ARRIVED.']],
+        ['СМ. ЗАГЛАВНЫЕ БУКВЫ.', ['СМ. ЗАГЛАВНЫЕ БУКВЫ.']],
+        ['Приложение А. Смотрите ниже.', ['Приложение А. Смотрите ниже.']],
+        ['Автор А. С. Пушкин.', ['Автор А. С. Пушкин.']],
+        ['Plan B. Next step.', ['Plan B. Next step.']],
+        ['См. раздел ниже. Далее.', ['См. раздел ниже.', ' Далее.']],
+        ['т. е. это так. Далее.', ['т. е. это так.', ' Далее.']],
+        ['Using GPUs. Next.', ['Using GPUs.', ' Next.']],
+        ['Проверка ДС. Эта строка.', ['Проверка ДС.', ' Эта строка.']],
+        ['Version 2.0 GA. Next sentence.', ['Version 2.0 GA.', ' Next sentence.']],
+        ['Ещё раз: ИМ. Ленина.', ['Ещё раз: ИМ. Ленина.']],
+        ['Улица ИМ. Ленина.', ['Улица ИМ. Ленина.']],
+        ['в г. Москва. Далее.', ['в г. Москва.', ' Далее.']],
+        ['в Г. Москва. Далее.', ['в Г. Москва.', ' Далее.']],
+    ])('should split %j around acronyms and abbreviations', (input, expected) => {
+        expect(sentenize(input)).toStrictEqual(expected);
+    });
 });
