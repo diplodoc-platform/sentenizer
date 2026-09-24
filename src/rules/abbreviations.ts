@@ -10,6 +10,7 @@ import {
     join,
     length,
     lt,
+    not,
     or,
     prop,
     toLower,
@@ -87,15 +88,24 @@ const isLeftAbbreviation = compose(
     lstToken,
 );
 
+const isCaps = allPass([isUpper, compose(lt(1), length)]);
+
+// an acronym written in capitals, like MR or API, followed by a sentence
+// in regular case is not the abbreviation it happens to spell (mr., api.);
+// in text written in capitals throughout it still is
+const isLeftAcronym = allPass([
+    compose(isCaps, omitNonAlphaStart, lstWord, lstToken, fst),
+    compose(not, isCaps, fstWord, snd) as Pred,
+]);
+
 // left abbreviation conditions:
 //     * delimiter is dot
 //     * lefts side right most word is known abbreviation
-export const leftAbbreviation = compose(
-    allPass([compose(isDotDelimiter, lstToken), isLeftAbbreviation]),
-    fst,
-);
-
-const isCaps = allPass([isUpper, compose(lt(1), length)]);
+//     * and is not an acronym in capitals
+export const leftAbbreviation = allPass([
+    compose(allPass([compose(isDotDelimiter, lstToken), isLeftAbbreviation]), fst),
+    compose(not, isLeftAcronym) as Pred,
+]);
 
 // right join condition is to be uppercase or lowercase word
 const rightLowercaseOrCaps = compose(anyPass([startsWithLower, isCaps]), fstWord, snd);
