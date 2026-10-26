@@ -48,7 +48,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@diplodoc/infra": "2.2.3",
+    "@diplodoc/infra": "2.3.0",
     "@esbuild-plugins/tsconfig-paths": "^0.1.2",
     "@types/node": "^22.19.7",
     "@types/ramda": "^0.28.13",
